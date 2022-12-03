@@ -24,9 +24,8 @@
             }
         });
 
-        let query = videos[Math.floor(Math.random()*videos.length)];
-
         let goSearch=()=>{
+            let query = videos[Math.floor(Math.random()*videos.length)];
             location.href = "https://www.youtube.com/results?search_query="+encodeURIComponent(query.title);
         };
 
@@ -43,6 +42,7 @@
                 let player = document.querySelector("video");
 
                 if(player && player.ended){
+                    let query = videos[Math.floor(Math.random()*videos.length)];
                     let next = document.querySelector("#video-title[title='"+query.title.replace(/'/,"\\'").replace(/"/,'\\\\"')+"']");
                     if(next) next.click();
                     else goSearch();
