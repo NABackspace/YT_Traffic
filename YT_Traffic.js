@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  try to take over the world!
-// @author       NA
+// @author       NA Backspace
 // @match        https://www.youtube.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @grant        none
@@ -33,17 +33,22 @@
         let tSearch = setInterval(()=>{
             if(/\/short/.exec(location.href)){
                 let player = document.querySelector("#shorts-player video");
-                if(player && player.paused && document.querySelector("ytd-shorts-player-controls button")) document.querySelector("ytd-shorts-player-controls button").click();
-                setTimeout(()=>goSearch(), 61000);
+                if(player && player.loop) player.loop = false;
+
+                if(player && player.ended) goSearch();
+                else
+                if(player && player.paused && !player.ended && document.querySelector("ytd-shorts-player-controls button")) document.querySelector("ytd-shorts-player-controls button").click();
             }else
             if(/\/watch/.exec(location.href)){
                 let player = document.querySelector("video");
-                if(player && player.paused && document.querySelector(".ytp-play-button")) document.querySelector(".ytp-play-button").click();
+
                 if(player && player.ended){
                     let next = document.querySelector("#video-title[title='"+query.title.replace(/'/,"\\'").replace(/"/,'\\\\"')+"']");
                     if(next) next.click();
                     else goSearch();
-                }
+                }else
+                if(player && player.paused && document.querySelector(".ytp-play-button")) document.querySelector(".ytp-play-button").click();
+
                 if(document.querySelector("html").scrollTopMax<10000) document.querySelector("html").scrollTop+=window.innerHeight;
                 else document.querySelector("html").scrollTop=0;
             }else
