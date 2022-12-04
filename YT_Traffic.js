@@ -6,6 +6,7 @@
 // @author       NA Backspace
 // @match        https://www.youtube.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
+// @require      https://code.jquery.com/jquery-3.6.0.min.js
 // @grant        none
 // ==/UserScript==
 
@@ -13,20 +14,35 @@
     'use strict';
 
     let videos = [];
-    fetch("https://www.youtube.com/feeds/videos.xml?channel_id=UCbTbW7ZJIwSgoqK9sMF7ykg").then(response => response.text()).then(data => {
-        data.split("<entry").forEach(v=>{
-            let entry = v.split("</entry");
+    fetch("https://www.youtube.com/channel/UCbTbW7ZJIwSgoqK9sMF7ykg/videos").then(response => response.text()).then(data => {
+        data.split('"videoRenderer":{"videoId":"').forEach(v=>{
+            let entry = v.split('}]},"title":{"runs":[{"text":"');
             if(entry[1]){
                 videos.push({
-                    id: entry[0].split("<yt:videoId>")[1].split("</yt:videoId>")[0],
-                    title: entry[0].split("<title>")[1].split("</title>")[0],
+                    id: v.split('"')[0],
+                    title: entry[1].split('"}]')[0],
                 });
             }
         });
+        console.log(videos);
 
+        let searching = false;
         let goSearch=()=>{
             let query = videos[Math.floor(Math.random()*videos.length)];
-            location.href = "https://www.youtube.com/results?search_query="+encodeURIComponent(query.title);
+//            let iSearch = $("#search-input input"), bSearch = $("#search-icon-legacy");
+//
+//            if(!searching && iSearch.length!=0 && bSearch.length!=0){
+//                searching = true;
+//                iSearch[0].focus();
+//                setTimeout(()=>{
+//                    iSearch.val(query.title).trigger("paste keyup");
+//                }, 300);
+//                setTimeout(()=>{
+//                    bSearch.focus();
+//                    bSearch.click();
+//                }, 700);
+//            }
+            location.href = "https://www.youtube.com/results?search_query="+encodeURIComponent(query.title).replace(/\s/,'+');
         };
 
         let tSearch = setInterval(()=>{
@@ -49,10 +65,15 @@
                 }else
                 if(player && player.paused && document.querySelector(".ytp-play-button")) document.querySelector(".ytp-play-button").click();
 
-                if(document.querySelector("html").scrollTopMax<10000) document.querySelector("html").scrollTop+=window.innerHeight;
-                else document.querySelector("html").scrollTop=0;
+                if(document.querySelector("html").scrollTopMax<10000) {
+                    document.querySelector("html").scrollTop+=window.innerHeight;
+                    setTimeout(()=>{
+                        if(document.querySelector("html").scrollTopMax>=10000) document.querySelector("html").scrollTop=0;
+                    }, 3000);
+                }
             }else
             if(/search_query=/.exec(location.href)){
+                searching = false;
                 let q = document.querySelector("input#search");
                 if(q){
                     let watch = document.querySelector("#video-title[title='"+q.value.replace(/'/,"\\'").replace(/"/,'\\\\"')+"']");
