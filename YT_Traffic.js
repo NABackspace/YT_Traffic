@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT Traffic
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  try to take over the world!
 // @author       NA Backspace
 // @match        https://www.youtube.com/*
@@ -70,11 +70,11 @@
                 if(ap) ap.click();
 
                 let nx = document.querySelector("#related a#thumbnail");
-                if(nx){
-                    if(videosID.indexOf(nx.getAttribute("href").replace(/^(.*)v=|&(.*)$/g,''))!=-1){
-                        isNext = true;
-                    }
-                }
+//                 if(nx){
+//                     if(videosID.indexOf(nx.getAttribute("href").replace(/^(.*)v=|&(.*)$/g,''))!=-1){
+//                         isNext = true;
+//                     }
+//                 }
 
                 let player = document.querySelector("video");
 
