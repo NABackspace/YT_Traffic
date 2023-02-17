@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT Traffic
 // @namespace    http://tampermonkey.net/
-// @version      0.3
+// @version      0.4
 // @description  try to take over the world!
 // @author       NA Backspace
 // @match        https://www.youtube.com/*
@@ -23,14 +23,18 @@
             accept=true;
             console.log("YT Accept");
             acc.click();
+            setTimeout(()=>{location.href = location.href}, 2000);
         }else
         if(accept){
             accnum++;
             if(accnum>2) location.href = location.href;
         }
-    }, 10000);
+    }, 7000);
 
     let videos = [], videosID = [];
+    var fetcvid = setInterval(function() {
+        if(top.location.host=="www.youtube.com"){
+            clearInterval(fetcvid);
     fetch("https://www.youtube.com/channel/UCbTbW7ZJIwSgoqK9sMF7ykg/videos").then(response => response.text()).then(data => {
         data.split('"videoRenderer":{"videoId":"').forEach(v=>{
             let entry = v.split('}]},"title":{"runs":[{"text":"');
@@ -117,8 +121,10 @@
                 setTimeout(()=>goSearch(), 6000);
             }
 
-            if(sessionStorage.getItem("YTStartAt") && (new Date().getTime())-sessionStorage.getItem("YTStartAt")>3600*1000) window.close();
-        }, 2000);
+            if(sessionStorage.getItem("YTStartAt") && (new Date().getTime())-sessionStorage.getItem("YTStartAt")>1800*1000) window.close();
+        }, 4000);
 
     });
+        }
+    }, 2000);
 })();
