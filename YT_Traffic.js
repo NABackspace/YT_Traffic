@@ -95,7 +95,7 @@
                         console.log("Next:", nx);
                     }
                 }else
-                if(player && player.paused && document.querySelector(".ytp-play-button")) document.querySelector(".ytp-play-button").click();
+                if(player && player.paused && player.currentTime<5 && document.querySelector(".ytp-play-button")) document.querySelector(".ytp-play-button").click();
 
                 if(document.querySelector("html").scrollHeight<5000) {
                     document.querySelector("html").scrollTop+=window.innerHeight;
