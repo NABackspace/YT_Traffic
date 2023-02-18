@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT Traffic
 // @namespace    http://tampermonkey.net/
-// @version      0.4
+// @version      0.5
 // @description  try to take over the world!
 // @author       NA Backspace
 // @match        https://www.youtube.com/*
